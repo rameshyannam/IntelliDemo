@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_comintellisample" default="compile.module.comintellisample">
+  <dirname property="module.comintellisample.basedir" file="${ant.file.module_comintellisample}"/>
+  
+  <property name="module.jdk.home.comintellisample" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.comintellisample" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.comintellisample" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.comintellisample" value="-encoding UTF-8 -source 1.5 -target 1.5 ${compiler.args}"/>
+  
+  <property name="comintellisample.output.dir" value="${module.comintellisample.basedir}/target/classes"/>
+  <property name="comintellisample.testoutput.dir" value="${module.comintellisample.basedir}/target/test-classes"/>
+  
+  <path id="comintellisample.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="comintellisample.module.production.classpath">
+    <path refid="${module.jdk.classpath.comintellisample}"/>
+  </path>
+  
+  <path id="comintellisample.runtime.production.module.classpath">
+    <pathelement location="${comintellisample.output.dir}"/>
+  </path>
+  
+  <path id="comintellisample.module.classpath">
+    <path refid="${module.jdk.classpath.comintellisample}"/>
+    <pathelement location="${comintellisample.output.dir}"/>
+  </path>
+  
+  <path id="comintellisample.runtime.module.classpath">
+    <pathelement location="${comintellisample.testoutput.dir}"/>
+    <pathelement location="${comintellisample.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.comintellisample">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.comintellisample">
+    <patternset refid="excluded.from.module.comintellisample"/>
+  </patternset>
+  
+  <path id="comintellisample.module.sourcepath">
+    <dirset dir="${module.comintellisample.basedir}">
+      <include name="src/main/java"/>
+      <include name="src/main/resources"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.comintellisample" depends="compile.module.comintellisample.production,compile.module.comintellisample.tests" description="Compile module comIntelliSample"/>
+  
+  <target name="compile.module.comintellisample.production" depends="register.custom.compilers" description="Compile module comIntelliSample; production classes">
+    <mkdir dir="${comintellisample.output.dir}"/>
+    <javac2 destdir="${comintellisample.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.comintellisample}/javac">
+      <compilerarg line="${compiler.args.comintellisample}"/>
+      <bootclasspath refid="comintellisample.module.bootclasspath"/>
+      <classpath refid="comintellisample.module.production.classpath"/>
+      <src refid="comintellisample.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.comintellisample"/>
+    </javac2>
+    
+    <copy todir="${comintellisample.output.dir}">
+      <fileset dir="${module.comintellisample.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.comintellisample.basedir}/src/main/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.comintellisample.tests" depends="register.custom.compilers,compile.module.comintellisample.production" description="compile module comIntelliSample; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.comintellisample" description="cleanup module">
+    <delete dir="${comintellisample.output.dir}"/>
+    <delete dir="${comintellisample.testoutput.dir}"/>
+  </target>
+</project>
